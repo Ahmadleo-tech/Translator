@@ -1,0 +1,196 @@
+from googletrans import Translator
+import pyttsx3
+speak = pyttsx3.init()
+language_mapping = {
+    'English': 'en',
+    'Spanish': 'es',
+    'Español': 'es',
+    'French': 'fr',
+    'Français': 'fr',
+    'German': 'de',
+    'Deutsch': 'de',
+    'Japanese': 'ja',
+    '日本語': 'ja',
+    'Chinese': 'zh-cn',
+    '中文': 'zh-cn',
+    'Russian': 'ru',
+    'Русский': 'ru',
+    'Italian': 'it',
+    'Italiano': 'it',
+    'Portuguese': 'pt',
+    'Português': 'pt',
+    'Arabic': 'ar',
+    'العربية': 'ar',
+    'Hindi': 'hi',
+    'हिन्दी': 'hi',
+    'Bengali': 'bn',
+    'বাংলা': 'bn',
+    'Korean': 'ko',
+    '한국어': 'ko',
+    'Vietnamese': 'vi',
+    'Tiếng Việt': 'vi',
+    'Turkish': 'tr',
+    'Türkçe': 'tr',
+    'Persian': 'fa',
+    'فارسی': 'fa',
+    'Urdu': 'ur',
+    'اردو': 'ur',
+    'Dutch': 'nl',
+    'Nederlands': 'nl',
+    'Greek': 'el',
+    'Ελληνικά': 'el',
+    'Hebrew': 'he',
+    'עברית': 'he',
+    'Polish': 'pl',
+    'Polski': 'pl',
+    'Swedish': 'sv',
+    'Svenska': 'sv',
+    'Danish': 'da',
+    'Dansk': 'da',
+    'Norwegian': 'no',
+    'Norsk': 'no',
+    'Finnish': 'fi',
+    'Suomi': 'fi',
+    'Czech': 'cs',
+    'Čeština': 'cs',
+    'Hungarian': 'hu',
+    'Magyar': 'hu',
+    'Romanian': 'ro',
+    'Română': 'ro',
+    'Thai': 'th',
+    'ภาษาไทย': 'th',
+    'Indonesian': 'id',
+    'Bahasa Indonesia': 'id',
+    'Malay': 'ms',
+    'Bahasa Melayu': 'ms',
+    'Filipino': 'fil',
+    'Tagalog': 'tl',
+    'Swahili': 'sw',
+    'Kiswahili': 'sw',
+    'Zulu': 'zu',
+    'isiZulu': 'zu',
+    'Xhosa': 'xh',
+    'isiXhosa': 'xh',
+    'Yoruba': 'yo',
+    'Èdè Yorùbá': 'yo',
+    'Igbo': 'ig',
+    'Asụsụ Igbo': 'ig',
+    'Amharic': 'am',
+    'አማርኛ': 'am',
+    'Hausa': 'ha',
+    'Harshen Hausa': 'ha',
+    'Punjabi': 'pa',
+    'ਪੰਜਾਬੀ': 'pa',
+    'Tamil': 'ta',
+    'தமிழ்': 'ta',
+    'Telugu': 'te',
+    'తెలుగు': 'te',
+    'Gujarati': 'gu',
+    'ગુજરાતી': 'gu',
+    'Marathi': 'mr',
+    'मराठी': 'mr',
+    'Kannada': 'kn',
+    'ಕನ್ನಡ': 'kn',
+    'Malayalam': 'ml',
+    'മലയാളം': 'ml',
+    'Sinhala': 'si',
+    'සිංහල': 'si',
+    'Burmese': 'my',
+    'မြန်မာစာ': 'my',
+    'Khmer': 'km',
+    'ភាសាខ្មែរ': 'km',
+    'Lao': 'lo',
+    'ພາສາລາວ': 'lo',
+    'Mongolian': 'mn',
+    'Монгол': 'mn',
+    'Nepali': 'ne',
+    'नेपाली': 'ne',
+    'Pashto': 'ps',
+    'پښتو': 'ps',
+    'Somali': 'so',
+    'Af-Soomaali': 'so',
+    'Tigrinya': 'ti',
+    'ትግርኛ': 'ti',
+    'Uzbek': 'uz',
+    'O‘zbek': 'uz',
+    'Kazakh': 'kk',
+    'Қазақ': 'kk',
+    'Georgian': 'ka',
+    'ქართული': 'ka',
+    'Armenian': 'hy',
+    'Հայերեն': 'hy',
+    'Azerbaijani': 'az',
+    'Azərbaycan': 'az',
+    'Albanian': 'sq',
+    'Shqip': 'sq',
+    'Bosnian': 'bs',
+    'Bosanski': 'bs',
+    'Serbian': 'sr',
+    'Српски': 'sr',
+    'Croatian': 'hr',
+    'Hrvatski': 'hr',
+    'Slovak': 'sk',
+    'Slovenčina': 'sk',
+    'Slovenian': 'sl',
+    'Slovenščina': 'sl',
+    'Latvian': 'lv',
+    'Latviešu': 'lv',
+    'Lithuanian': 'lt',
+    'Lietuvių': 'lt',
+    'Estonian': 'et',
+    'Eesti': 'et',
+    'Icelandic': 'is',
+    'Íslenska': 'is',
+    'Macedonian': 'mk',
+    'Македонски': 'mk',
+    'Bulgarian': 'bg',
+    'Български': 'bg',
+    'Maltese': 'mt',
+    'Malti': 'mt',
+    'Welsh': 'cy',
+    'Cymraeg': 'cy',
+    'Irish': 'ga',
+    'Gaeilge': 'ga',
+    'Gaelic': 'gd',
+    'Gàidhlig': 'gd'
+}
+
+# Function to find and set the voice based on the language code
+def talk(engine, code):
+    voices = engine.getProperty('voices')
+    for voice in voices:
+        if code in voice.languages:
+            engine.setProperty('voice', voice.id)
+            return True
+    return False
+
+# Function to translate text and speak it
+def trans(text, code):
+    translator = Translator()
+    result = translator.translate(text, dest=code)
+    print("Translated Text:", result.text)
+
+    if not talk(speak, code):
+        speak.say(result.text)
+        speak.runAndWait()
+
+#  # Main Function
+if __name__ == "__main__":
+    print("Available Languages and Their Codes:")
+    # Printing the Disctionary
+    for lang in language_mapping.items():
+        print(lang)
+
+    speak.say("Add the text you want to convert")
+    speak.runAndWait()
+    text = str(input("Enter text (any language) you want to translate: "))
+
+    speak.say("Enter the language name or code")
+    speak.runAndWait()
+    language = str(input("Enter language name or code: "))
+
+    if( text and language):
+        code = language_mapping.get(language, 'en')
+        trans(text, code)
+    else:
+        print("Invalid input. Please provide both text and language.")
